@@ -1,12 +1,13 @@
 addpath ServiceRoutines
 % Driver script for solving the 1D(spherically symmetric reduction) Generalized harmonic Einstein equations
 Globals1D;
+GlobalsGR;
 
 % Order of polymomials used for approximation 
 N = 1;
 
 % Generate simple mesh
-[Nv, VX, K, EToV] = MeshGen1D(1.99, 2.01, 1);
+[Nv, VX, K, EToV] = MeshGen1D(1.7, 10, 1000);
 
 % Initialize solver and construct grid and metric
 StartUp1D;
@@ -36,32 +37,39 @@ res_Pi11 = zeros(Np,K);
 res_Phi00 = zeros(Np,K);                                                                                      
 res_Phi01 = zeros(Np,K);                                                                                      
 res_Phi11 = zeros(Np,K);                                                                                      
-                                                                                                         
+res_S = zeros(Np,K);                                                                                                    
+res_Pi_S = zeros(Np,K);
+res_Phi_S = zeros(Np,K);
+res_psi = zeros(Np,K);
+res_Pi_psi = zeros(Np,K);
+res_Phi_psi = zeros(Np,K);
+
 % compute time step size                                                                                 
 xmin = min(abs(x(1,:)-x(2,:)));                                                                          
-dt = 0.9/(2*N+1)*xmin;                                                            
-Nsteps = ceil(FinalTime/dt); dt = FinalTime/Nsteps;                                                      
+dt = 0.2*xmin;                                                            
+Nsteps = FinalTime/dt;
+%Nsteps = ceil(FinalTime/dt); 
+%dt = FinalTime/Nsteps;                                                      
 
-[rhs_g00, rhs_g01, rhs_g11, rhs_Pi00, rhs_Pi01, rhs_Pi11, rhs_Phi00, rhs_Phi01, rhs_Phi11] = compute_RHS
-                                                                                                         
 for tstep=1:Nsteps                                                                                   
     for INTRK = 1:5                                                                            
         timelocal = time + rk4c(INTRK)*dt;                                                           
-        [rhs_g00, rhs_g01, rhs_g11, rhs_Pi00, rhs_Pi01, rhs_Pi11, rhs_Phi00, rhs_Phi01, rhs_Phi11] = compute_RHS;
+        [rhs_g00, rhs_g01, rhs_g11, rhs_Pi00, rhs_Pi01, rhs_Pi11, rhs_Phi00, rhs_Phi01, rhs_Phi11, ...
+                rhs_S, rhs_Pi_S, rhs_Phi_S, rhs_psi, rhs_Pi_psi, rhs_Phi_psi] = compute_RHS;
 
-        b = sqrt(1/g11(vmapO));
-        rhs_Pi00(vmapO) = paragamma2/2*rhs_g00(vmapO) + 1/2*rhs_Pi00(vmapO) ...
-                + b/2*rhs_Phi00(vmapO) ;
-        rhs_Pi01(vmapO) = paragamma2/2*rhs_g01(vmapO) + 1/2*rhs_Pi01(vmapO) ...
-                + b/2*rhs_Phi01(vmapO) ;
-        rhs_Pi11(vmapO) = paragamma2/2*rhs_g11(vmapO) + 1/2*rhs_Pi11(vmapO) ...
-                + b/2*rhs_Phi11(vmapO) ;
-        rhs_Phi00(vmapO) = -paragamma2/2/b*rhs_g00(vmapO) ...
-                + 1/2/b*rhs_Pi00(vmapO) + 1/2*rhs_Phi00(vmapO) ;
-        rhs_Phi01(vmapO) = -paragamma2/2/b*rhs_g01(vmapO) ...
-                + 1/2/b*rhs_Pi01(vmapO) + 1/2*rhs_Phi01(vmapO) ;
-        rhs_Phi11(vmapO) = -paragamma2/2/b*rhs_g11(vmapO) ...
-                + 1/2/b*rhs_Pi11(vmapO) + 1/2*rhs_Phi11(vmapO) ;
+        %b = sqrt(1/g11(vmapO));
+        %rhs_Pi00(vmapO) = paragamma2/2*rhs_g00(vmapO) + 1/2*rhs_Pi00(vmapO) ...
+        %        + b/2*rhs_Phi00(vmapO) ;
+        %rhs_Pi01(vmapO) = paragamma2/2*rhs_g01(vmapO) + 1/2*rhs_Pi01(vmapO) ...
+        %        + b/2*rhs_Phi01(vmapO) ;
+        %rhs_Pi11(vmapO) = paragamma2/2*rhs_g11(vmapO) + 1/2*rhs_Pi11(vmapO) ...
+        %        + b/2*rhs_Phi11(vmapO) ;
+        %rhs_Phi00(vmapO) = -paragamma2/2/b*rhs_g00(vmapO) ...
+        %        + 1/2/b*rhs_Pi00(vmapO) + 1/2*rhs_Phi00(vmapO) ;
+        %rhs_Phi01(vmapO) = -paragamma2/2/b*rhs_g01(vmapO) ...
+        %        + 1/2/b*rhs_Pi01(vmapO) + 1/2*rhs_Phi01(vmapO) ;
+        %rhs_Phi11(vmapO) = -paragamma2/2/b*rhs_g11(vmapO) ...
+        %        + 1/2/b*rhs_Pi11(vmapO) + 1/2*rhs_Phi11(vmapO) ;
 
         %rhs_Pi00(vmapO) = paragamma2*rhs_g00(vmapO);
         %rhs_Pi01(vmapO) = paragamma2*rhs_g01(vmapO);
@@ -80,6 +88,12 @@ for tstep=1:Nsteps
         res_Phi00 = rk4a(INTRK)*res_Phi00 + dt*rhs_Phi00;                                                           
         res_Phi01 = rk4a(INTRK)*res_Phi01 + dt*rhs_Phi01;                                                           
         res_Phi11 = rk4a(INTRK)*res_Phi11 + dt*rhs_Phi11;                                                           
+        res_S = rk4a(INTRK)*res_S + dt*rhs_S;                                                           
+        res_Pi_S = rk4a(INTRK)*res_Pi_S + dt*rhs_Pi_S;                                                           
+        res_Phi_S = rk4a(INTRK)*res_Phi_S + dt*rhs_Phi_S;                                                           
+        res_psi = rk4a(INTRK)*res_psi + dt*rhs_psi;                                                           
+        res_Pi_psi = rk4a(INTRK)*res_Pi_psi + dt*rhs_Pi_psi;                                                           
+        res_Phi_psi = rk4a(INTRK)*res_Phi_psi + dt*rhs_Phi_psi;                                                           
 
         g00 = g00+rk4b(INTRK)*res_g00;                                                                      
         g01 = g01+rk4b(INTRK)*res_g01;                                                                      
@@ -90,6 +104,12 @@ for tstep=1:Nsteps
         Phi00 = Phi00+rk4b(INTRK)*res_Phi00;                                                                      
         Phi01 = Phi01+rk4b(INTRK)*res_Phi01;                                                                      
         Phi11 = Phi11+rk4b(INTRK)*res_Phi11;                                                                      
+        S = S+rk4b(INTRK)*res_S;                                                                      
+        Pi_S = Pi_S+rk4b(INTRK)*res_Pi_S;                                                                      
+        Phi_S = Phi_S+rk4b(INTRK)*res_Phi_S;                                                                      
+        psi = psi+rk4b(INTRK)*res_psi;                                                                      
+        Pi_psi = Pi_psi+rk4b(INTRK)*res_Pi_psi;                                                                      
+        Phi_psi = Phi_psi+rk4b(INTRK)*res_Phi_psi;                                                                      
     end;                                                                                             
 
     % limiter
@@ -118,9 +138,9 @@ for tstep=1:Nsteps
     % Increment time                                                                                 
     time = time+dt;                                                                                  
     time_seq = [time_seq, time];
-    rhs_g11_seq = [rhs_g11_seq, max(max(abs(rhs_g11)))];
-    rhs_Pi11_seq = [rhs_Pi11_seq, max(max(abs(rhs_Pi11)))];
-    rhs_Phi11_seq = [rhs_Phi11_seq, max(max(abs(rhs_Phi11)))];
+    %rhs_g11_seq = [rhs_g11_seq, max(max(abs(rhs_g11)))];
+    %rhs_Pi11_seq = [rhs_Pi11_seq, max(max(abs(rhs_Pi11)))];
+    %rhs_Phi11_seq = [rhs_Phi11_seq, max(max(abs(rhs_Phi11)))];
 
     C0_seq = [C0_seq, max(max(abs(C0)))];
     C1_seq = [C1_seq, max(max(abs(C1)))];
@@ -128,14 +148,14 @@ for tstep=1:Nsteps
     if (mod(tstep, 1000) == 0)
         %figure(1); plot(x, g00-g00_exact); title(['Error of g00, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(2); plot(x, g01-g01_exact); title(['Error of g01, t = ', num2str(time)]); drawnow; pause(.1);
-        figure(3); plot(x, g11-g11_exact); title(['Errof of g11, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(3); plot(x, g11-g11_exact); title(['Errof of g11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(4); plot(x, Pi00-Pi00_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
         %figure(5); plot(x, Pi01-Pi01_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
-        figure(6); plot(x, Pi11-Pi11_exact); title(['Error of Pi11, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(6); plot(x, Pi11-Pi11_exact); title(['Error of Pi11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(7); plot(x, Phi00-Phi00_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
         %figure(8); plot(x, Phi01-Phi01_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
-        figure(9); plot(x, Phi11-Phi11_exact); title(['Error of Phi11, t = ', num2str(time)]); drawnow; pause(.1);
-        figure(22); plot(x, g11.*g00 - g01.*g01); title(['Det(g), t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(9); plot(x, Phi11-Phi11_exact); title(['Error of Phi11, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(22); plot(x, g11.*g00 - g01.*g01); title(['Det(g), t = ', num2str(time)]); drawnow; pause(.1);
 
         %figure(10); plot(x, rhs_g11); title(['rhs\_g11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(11); plot(x, rhs_Pi11); title(['rhs\_Pi11, t = ', num2str(time)]); drawnow; pause(.1);
@@ -145,9 +165,9 @@ for tstep=1:Nsteps
         figure(14); semilogy(time_seq, C1_seq); title(['max of C1 with time']); drawnow; pause(.1);
         figure(15); semilogy(time_seq, Cr11_seq); title(['max of Cr11 with time']); drawnow; pause(.1);
 
-        figure(16); semilogy(time_seq, rhs_g11_seq); title(['max of rhs\_g11 with time']); drawnow; pause(.1);
-        figure(17); semilogy(time_seq, rhs_Pi11_seq); title(['max of rhs\_Pi11 with time']); drawnow; pause(.1);
-        figure(18); semilogy(time_seq, rhs_Phi11_seq); title(['max of rhs\_Phi11 with time']); drawnow; pause(.1);
+        %figure(16); semilogy(time_seq, rhs_g11_seq); title(['max of rhs\_g11 with time']); drawnow; pause(.1);
+        %figure(17); semilogy(time_seq, rhs_Pi11_seq); title(['max of rhs\_Pi11 with time']); drawnow; pause(.1);
+        %figure(18); semilogy(time_seq, rhs_Phi11_seq); title(['max of rhs\_Phi11 with time']); drawnow; pause(.1);
 
     end;
 end;  
