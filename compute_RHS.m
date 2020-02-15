@@ -145,10 +145,10 @@ src_Pi_S = (-lapse.*Phi_S.*gamma11.*(normal0.*Pi01 + normal1.*Pi11) - 0.5.*lapse
         - lapse.*(x.*Pi_S-normal1)) 
         - lapse./x.*invg11.*H1.*gamma11.*g11.*(x.*Phi_S+1) 
         %row 3
-        - 2.*lapse.*(Pi_S.*Pi_S-gamma11.*Phi_S.*Phi_S) + 4.*lapse./x.*(normal1.*Pi_S-gamma11.*Phi_S) 
+        - 2.*lapse.*(Pi_S.*Pi_S-gamma11.*Phi_S.*Phi_S) + 4.*lapse./x.*(normal1.*Pi_S+gamma11.*Phi_S) 
         + 3./power(x,2).*(lapse.*gamma11+shift.*normal1) + lapse./power(x,2).*exp(-2.*S)
         %row 4
-        %+ 8./x.*lapse.*Phi_S;
+        %+ 8./x.*lapse.*Phi_S
         - 0.5.*lapse.*paragamma0.*(normal0.*C0+normal1.*C1));
         %TBD
 src_Phi_S = lapse.*(0.5.*Pi_S.*(normal0.*normal0.*Phi00 + 2.*normal0.*normal1.*Phi01 + normal1.*normal1.*Phi11) 
@@ -243,6 +243,23 @@ rhs_Phi_S = src_Phi_S - Hhat_Phi_S;
 rhs_psi = src_psi - Hhat_psi;
 rhs_Pi_psi = src_Pi_psi - Hhat_Pi_psi;
 rhs_Phi_psi = src_Phi_psi - Hhat_Phi_psi;
+
+%rhs_g00 = 0.*x;
+%rhs_g01 = 0.*x;
+%rhs_g11 = 0.*x;
+%rhs_Pi00 = 0.*x;
+%rhs_Pi01 = 0.*x;
+%rhs_Pi11 = 0.*x;
+%rhs_Phi00 = 0.*x;
+%rhs_Phi01 = 0.*x;
+%rhs_Phi11 = 0.*x;
+%rhs_S = 0.*x;
+%rhs_Pi_S = 0.*x;
+%rhs_Phi_S = 0.*x;
+%rhs_psi = 0.*x;
+%rhs_Pi_psi = 0.*x;
+%rhs_Phi_psi = 0.*x;
+
 %constraints
 Cr11 = avg_deri_g11 - Phi11;
 

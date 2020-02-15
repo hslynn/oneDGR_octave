@@ -7,14 +7,15 @@ GlobalsGR;
 N = 1;
 
 % Generate simple mesh
-[Nv, VX, K, EToV] = MeshGen1D(1.7, 10, 1000);
+[Nv, VX, K, EToV] = MeshGen1D(3, 10, 200);
 
 % Initialize solver and construct grid and metric
 StartUp1D;
 
 % Set initial conditions
 %init_min;
-init_schwarzschild_kerr_schild;
+init_ks_out;
+%init_iso;
 %init_PG;
 %init_test;
 time = 0;                                                                                                
@@ -148,13 +149,13 @@ for tstep=1:Nsteps
     if (mod(tstep, 1000) == 0)
         %figure(1); plot(x, g00-g00_exact); title(['Error of g00, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(2); plot(x, g01-g01_exact); title(['Error of g01, t = ', num2str(time)]); drawnow; pause(.1);
-        %figure(3); plot(x, g11-g11_exact); title(['Errof of g11, t = ', num2str(time)]); drawnow; pause(.1);
+        figure(3); plot(x, g11-g11_exact); title(['Errof of g11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(4); plot(x, Pi00-Pi00_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
         %figure(5); plot(x, Pi01-Pi01_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
-        %figure(6); plot(x, Pi11-Pi11_exact); title(['Error of Pi11, t = ', num2str(time)]); drawnow; pause(.1);
+        figure(6); plot(x, Pi11-Pi11_exact); title(['Error of Pi11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(7); plot(x, Phi00-Phi00_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
         %figure(8); plot(x, Phi01-Phi01_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
-        %figure(9); plot(x, Phi11-Phi11_exact); title(['Error of Phi11, t = ', num2str(time)]); drawnow; pause(.1);
+        figure(9); plot(x, Phi11-Phi11_exact); title(['Error of Phi11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(22); plot(x, g11.*g00 - g01.*g01); title(['Det(g), t = ', num2str(time)]); drawnow; pause(.1);
 
         %figure(10); plot(x, rhs_g11); title(['rhs\_g11, t = ', num2str(time)]); drawnow; pause(.1);
