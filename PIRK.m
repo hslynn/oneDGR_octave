@@ -1,5 +1,0 @@
-Globals1D;
-GlobalsGR;
-
- 
-

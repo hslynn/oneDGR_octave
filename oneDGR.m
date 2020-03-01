@@ -5,19 +5,22 @@ GlobalsGR;
 
 % Order of polymomials used for approximation 
 N = 1;
+WITHLIMITER = 1;
 
 % Generate simple mesh
-[Nv, VX, K, EToV] = MeshGen1D(3, 10, 200);
+[Nv, VX, K, EToV] = MeshGen1D(1.7, 5, 20);
 
 % Initialize solver and construct grid and metric
 StartUp1D;
 
 % Set initial conditions
-%init_min;
-init_ks_out;
-%init_iso;
-%init_PG;
 %init_test;
+%init_min;
+%init_iso;
+%init_PG_out;
+init_ks_in;
+%init_PG_in;
+%init_ks_out;
 time = 0;                                                                                                
 FinalTime = 10000.0; 
 time_seq = [];
@@ -51,6 +54,8 @@ dt = 0.2*xmin;
 Nsteps = FinalTime/dt;
 %Nsteps = ceil(FinalTime/dt); 
 %dt = FinalTime/Nsteps;                                                      
+[rhs_g00, rhs_g01, rhs_g11, rhs_Pi00, rhs_Pi01, rhs_Pi11, rhs_Phi00, rhs_Phi01, rhs_Phi11, ...
+                rhs_S, rhs_Pi_S, rhs_Phi_S, rhs_psi, rhs_Pi_psi, rhs_Phi_psi] = compute_RHS;
 
 for tstep=1:Nsteps                                                                                   
     for INTRK = 1:5                                                                            
@@ -114,15 +119,23 @@ for tstep=1:Nsteps
     end;                                                                                             
 
     % limiter
-    %g00 = SlopeLimitN(g00);
-    %g01 = SlopeLimitN(g01);
-    %g11 = SlopeLimitN(g11);
-    %Pi00 = SlopeLimitN(Pi00);
-    %Pi01 = SlopeLimitN(Pi01);
-    %Pi11 = SlopeLimitN(Pi11);
-    %Phi00 = SlopeLimitN(Phi00);
-    %Phi01 = SlopeLimitN(Phi01);
-    %Phi11 = SlopeLimitN(Phi11);
+    if (WITHLIMITER)
+        g00 = SlopeLimit1(g00);
+        g01 = SlopeLimit1(g01);
+        g11 = SlopeLimit1(g11);
+        Pi00 = SlopeLimit1(Pi00);
+        Pi01 = SlopeLimit1(Pi01);
+        Pi11 = SlopeLimit1(Pi11);
+        Phi00 = SlopeLimit1(Phi00);
+        Phi01 = SlopeLimit1(Phi01);
+        Phi11 = SlopeLimit1(Phi11);
+        S = SlopeLimit1(S);
+        Pi_S = SlopeLimit1(Pi_S);
+        Phi_S = SlopeLimit1(Phi_S);
+        psi = SlopeLimit1(psi);
+        Pi_psi = SlopeLimit1(Pi_psi);
+        Phi_psi = SlopeLimit1(Phi_psi);
+    end;
 
     %filter
     %F = Filter1D(N, 0, 50);
@@ -152,11 +165,15 @@ for tstep=1:Nsteps
         figure(3); plot(x, g11-g11_exact); title(['Errof of g11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(4); plot(x, Pi00-Pi00_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
         %figure(5); plot(x, Pi01-Pi01_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
-        figure(6); plot(x, Pi11-Pi11_exact); title(['Error of Pi11, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(6); plot(x, Pi11-Pi11_exact); title(['Error of Pi11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(7); plot(x, Phi00-Phi00_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
         %figure(8); plot(x, Phi01-Phi01_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
-        figure(9); plot(x, Phi11-Phi11_exact); title(['Error of Phi11, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(9); plot(x, Phi11-Phi11_exact); title(['Error of Phi11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(22); plot(x, g11.*g00 - g01.*g01); title(['Det(g), t = ', num2str(time)]); drawnow; pause(.1);
+
+        figure(30); plot(x, S-S_exact); title(['Error of S, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(31); plot(x, Pi_S-Pi_S_exact); title(['Error of Pi_S, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(32); plot(x, Phi_S-Phi_S_exact); title(['Error of Phi_S, t = ', num2str(time)]); drawnow; pause(.1);
 
         %figure(10); plot(x, rhs_g11); title(['rhs\_g11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(11); plot(x, rhs_Pi11); title(['rhs\_Pi11, t = ', num2str(time)]); drawnow; pause(.1);
