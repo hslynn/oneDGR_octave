@@ -8,8 +8,8 @@ N = 10;
 
 % Generate simple mesh
 inB = 1.5;
-outB = 2.5;
-meshNum = 1;
+outB = 5;
+meshNum = 10;
 [Nv, VX, K, EToV] = MeshGen1D(inB, outB, meshNum);
 
 % Initialize solver and construct grid and metric
@@ -19,7 +19,7 @@ StartUp1D;
 WITHLIMITER = 0;
 WITHFILTER = 1;
 eta = 0.3;
-s = 14;
+s = 16;
 Nc = floor(eta*N);
 F = Filter1D(N, Nc, s);
 
