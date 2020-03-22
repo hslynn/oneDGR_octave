@@ -178,7 +178,7 @@ src_Phi_psi = lapse.*(0.5.*Pi_psi.*(normal0.*normal0.*Phi00 + 2.*normal0.*normal
 [deri_plus_Phi_S, deri_minus_Phi_S] = deri(Phi_S, Phi_S, Phi_S_exact);
 [deri_plus_psi, deri_minus_psi] = deri(psi, psi, psi_exact);
 [deri_plus_Pi_psi, deri_minus_Pi_psi] = deri(Pi_psi, Pi_psi, Pi_psi_exact);
-[deri_plus_Phi_psi, deri_minus_Phi_psi] = deri(Phi_psi, Phi_psi,  Phi_psi_exact);
+[deri_plus_Phi_psi, deri_minus_Phi_psi] = deri(Phi_psi, Phi_psi,  Phi_psi);
 
 max_alpha = 1.0;
 avg_deri_g00 = 0.5.*(deri_plus_g00+deri_minus_g00);
@@ -244,6 +244,74 @@ rhs_psi = src_psi - Hhat_psi;
 rhs_Pi_psi = src_Pi_psi - Hhat_Pi_psi;
 rhs_Phi_psi = src_Phi_psi - Hhat_Phi_psi;
 
+%inner boundary
+%rhs_g00_in = rhs_g00(vmapI);
+%rhs_g01_in = rhs_g01(vmapI);
+%rhs_g11_in = rhs_g11(vmapI);
+% 
+%rhs_Pi00_in = rhs_Pi00(vmapI);
+%rhs_Pi01_in = rhs_Pi01(vmapI);
+%rhs_Pi11_in = rhs_Pi11(vmapI);
+%                
+%rhs_Phi00_in = rhs_Phi00(vmapI);
+%rhs_Phi01_in = rhs_Phi01(vmapI);
+%rhs_Phi11_in = rhs_Phi11(vmapI);
+
+%rhs_g00(vmapI) = 0.;
+%rhs_g01(vmapI) = 0.;
+%rhs_g11(vmapI) = 0.;
+
+%rhs_Pi00(vmapI) = rhs_Pi00_in - paragamma2*rhs_g00_in;
+%rhs_Pi01(vmapI) = rhs_Pi01_in - paragamma2*rhs_g01_in;
+%rhs_Pi11(vmapI) = rhs_Pi11_in - paragamma2*rhs_g11_in;
+  
+%rhs_Phi00(vmapI);
+%rhs_Phi01(vmapI);
+%rhs_Phi11(vmapI);
+
+%out bdry
+%rhs_g00_out = rhs_g00(vmapO);
+%rhs_g01_out = rhs_g01(vmapO);
+%rhs_g11_out = rhs_g11(vmapO);
+% 
+%rhs_Pi00_out = rhs_Pi00(vmapO);
+%rhs_Pi01_out = rhs_Pi01(vmapO);
+%rhs_Pi11_out = rhs_Pi11(vmapO);
+%                
+%rhs_Phi00_out = rhs_Phi00(vmapO);
+%rhs_Phi01_out = rhs_Phi01(vmapO);
+%rhs_Phi11_out = rhs_Phi11(vmapO);
+%
+%b = sqrt(1/g11(vmapO));
+%rhs_g00(vmapO) = 0.;
+%rhs_g01(vmapO) = 0.;
+%rhs_g11(vmapO) = 0.;
+
+%rhs_Pi00(vmapO) = paragamma2/2*rhs_g00_out + 1/2*rhs_Pi00_out ...
+%        + b/2*rhs_Phi00_out - 0.25*Phi00(vmapO)*power(b,3)*rhs_g11_out;
+%rhs_Pi01(vmapO) = paragamma2/2*rhs_g01_out + 1/2*rhs_Pi01_out ...
+%        + b/2*rhs_Phi01_out - 0.25*Phi01(vmapO)*power(b,3)*rhs_g11_out;
+%rhs_Pi11(vmapO) = paragamma2/2*rhs_g11_out + 1/2*rhs_Pi11_out ...
+%        + b/2*rhs_Phi11_out - 0.25*Phi11(vmapO)*power(b,3)*rhs_g11_out;
+%rhs_Phi00(vmapO) = -paragamma2/2/b*rhs_g00_out ...
+%        + 1/2/b*rhs_Pi00_out + 1/2*rhs_Phi00_out + 0.25*Phi00(vmapO)*power(b,2)*rhs_g11_out;
+%rhs_Phi01(vmapO) = -paragamma2/2/b*rhs_g01_out ...
+%        + 1/2/b*rhs_Pi01_out + 1/2*rhs_Phi01_out + 0.25*Phi01(vmapO)*power(b,2)*rhs_g11_out;
+%rhs_Phi11(vmapO) = -paragamma2/2/b*rhs_g11_out ...
+%        + 1/2/b*rhs_Pi11_out + 1/2*rhs_Phi11_out + 0.25*Phi11(vmapO)*power(b,2)*rhs_g11_out;
+
+
+%rhs_Pi_S(vmapO) = paragamma2/2*rhs_S(vmapO) + 1/2*rhs_Pi_S(vmapO) ...
+%        + b/2*rhs_Phi_S(vmapO) ;
+%rhs_Pi_psi(vmapO) = paragamma2/2*rhs_psi(vmapO) + 1/2*rhs_Pi_psi(vmapO) ...
+%        + b/2*rhs_Phi_psi(vmapO) ;
+%
+%rhs_Phi_S(vmapO) = -paragamma2/2/b*rhs_S(vmapO) ...
+%        + 1/2/b*rhs_Pi_S(vmapO) + 1/2*rhs_Phi_S(vmapO) ;
+%rhs_Phi_psi(vmapO) = -paragamma2/2/b*rhs_psi(vmapO) ...
+%        + 1/2/b*rhs_Pi_psi(vmapO) + 1/2*rhs_Phi_psi(vmapO) ;
+
+
 %rhs_g00 = 0.*x;
 %rhs_g01 = 0.*x;
 %rhs_g11 = 0.*x;
@@ -253,12 +321,12 @@ rhs_Phi_psi = src_Phi_psi - Hhat_Phi_psi;
 %rhs_Phi00 = 0.*x;
 %rhs_Phi01 = 0.*x;
 %rhs_Phi11 = 0.*x;
-%rhs_S = 0.*x;
-%rhs_Pi_S = 0.*x;
-%rhs_Phi_S = 0.*x;
-%rhs_psi = 0.*x;
-%rhs_Pi_psi = 0.*x;
-%rhs_Phi_psi = 0.*x;
+rhs_S = 0.*x;
+rhs_Pi_S = 0.*x;
+rhs_Phi_S = 0.*x;
+rhs_psi = 0.*x;
+rhs_Pi_psi = 0.*x;
+rhs_Phi_psi = 0.*x;
 
 %constraints
 Cr11 = avg_deri_g11 - Phi11;

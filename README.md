@@ -6,3 +6,8 @@ Working parameter:
 
 Still not working: 
 * outB = 5;
+
+Conjecture:
+* The instability are because of two things:
+    1. Aliasing
+    2. Something else

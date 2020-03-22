@@ -226,19 +226,19 @@ rhs_Pi_psi = src_Pi_psi - Hhat_Pi_psi;
 rhs_Phi_psi = src_Phi_psi - Hhat_Phi_psi;
 
 %out bdry
-%b = sqrt(1/g11(vmapO));
-%rhs_Pi00(vmapO) = paragamma2/2*rhs_g00(vmapO) + 1/2*rhs_Pi00(vmapO) ...
-%        + b/2*rhs_Phi00(vmapO) ;
-%rhs_Pi01(vmapO) = paragamma2/2*rhs_g01(vmapO) + 1/2*rhs_Pi01(vmapO) ...
-%        + b/2*rhs_Phi01(vmapO) ;
-%rhs_Pi11(vmapO) = paragamma2/2*rhs_g11(vmapO) + 1/2*rhs_Pi11(vmapO) ...
-%        + b/2*rhs_Phi11(vmapO) ;
-%rhs_Phi00(vmapO) = -paragamma2/2/b*rhs_g00(vmapO) ...
-%        + 1/2/b*rhs_Pi00(vmapO) + 1/2*rhs_Phi00(vmapO) ;
-%rhs_Phi01(vmapO) = -paragamma2/2/b*rhs_g01(vmapO) ...
-%        + 1/2/b*rhs_Pi01(vmapO) + 1/2*rhs_Phi01(vmapO) ;
-%rhs_Phi11(vmapO) = -paragamma2/2/b*rhs_g11(vmapO) ...
-%        + 1/2/b*rhs_Pi11(vmapO) + 1/2*rhs_Phi11(vmapO) ;
+b = sqrt(1/g11(vmapO));
+rhs_Pi00(vmapO) = paragamma2/2*rhs_g00(vmapO) + 1/2*rhs_Pi00(vmapO) ...
+        + b/2*rhs_Phi00(vmapO) ;
+rhs_Pi01(vmapO) = paragamma2/2*rhs_g01(vmapO) + 1/2*rhs_Pi01(vmapO) ...
+        + b/2*rhs_Phi01(vmapO) ;
+rhs_Pi11(vmapO) = paragamma2/2*rhs_g11(vmapO) + 1/2*rhs_Pi11(vmapO) ...
+        + b/2*rhs_Phi11(vmapO) ;
+rhs_Phi00(vmapO) = -paragamma2/2/b*rhs_g00(vmapO) ...
+        + 1/2/b*rhs_Pi00(vmapO) + 1/2*rhs_Phi00(vmapO) ;
+rhs_Phi01(vmapO) = -paragamma2/2/b*rhs_g01(vmapO) ...
+        + 1/2/b*rhs_Pi01(vmapO) + 1/2*rhs_Phi01(vmapO) ;
+rhs_Phi11(vmapO) = -paragamma2/2/b*rhs_g11(vmapO) ...
+        + 1/2/b*rhs_Pi11(vmapO) + 1/2*rhs_Phi11(vmapO) ;
 %
 %rhs_Pi_S(vmapO) = paragamma2/2*rhs_S(vmapO) + 1/2*rhs_Pi_S(vmapO) ...
 %        + b/2*rhs_Phi_S(vmapO) ;
@@ -250,21 +250,13 @@ rhs_Phi_psi = src_Phi_psi - Hhat_Phi_psi;
 %rhs_Phi_psi(vmapO) = -paragamma2/2/b*rhs_psi(vmapO) ...
 %        + 1/2/b*rhs_Pi_psi(vmapO) + 1/2*rhs_Phi_psi(vmapO) ;
 %
-rhs_g00(vmapO) = 0.0;
-rhs_g01(vmapO) = 0.0;
-rhs_g11(vmapO) = 0.0;
-rhs_Pi00(vmapO) = 0.0;
-rhs_Pi01(vmapO) = 0.0;
-rhs_Pi11(vmapO) = 0.0;
-rhs_Phi00(vmapO) = 0.0;
-rhs_Phi01(vmapO) = 0.0;
-rhs_Phi11(vmapO) = 0.0;
-rhs_S(vmapO) = 0.0;
-rhs_Pi_S(vmapO) = 0.0;
-rhs_Phi_S(vmapO) = 0.0;
-rhs_psi(vmapO) = 0.0;
-rhs_Pi_psi(vmapO) = 0.0;
-rhs_Phi_psi(vmapO) = 0.0;
+
+rhs_S = 0.*x;
+rhs_Pi_S = 0.*x;
+rhs_Phi_S = 0.*x;
+rhs_psi = 0.*x;
+rhs_Pi_psi = 0.*x;
+rhs_Phi_psi = 0.*x;
 
 %inner bdry;
 %rhs_g00(vmapI) = 0.0;
