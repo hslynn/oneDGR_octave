@@ -22,9 +22,9 @@ Phi01 = Phi01_exact;
 Phi11 = Phi11_exact;
 
 H0 = 0.*x;
-H1 = 0.*x; %2./x;
+H1 = 0.*x + 2./x;
 
 deriH00 = 0.*x;
 deriH01 = 0.*x;
 deriH10 = 0.*x;
-deriH11 = 0.*x; %-2./(x.*x);
+deriH11 = 0.*x - 2./(x.*x);

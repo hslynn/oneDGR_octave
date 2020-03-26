@@ -1,5 +1,4 @@
-function [rhs_g00, rhs_g01, rhs_g11, rhs_Pi00, rhs_Pi01, rhs_Pi11, rhs_Phi00, rhs_Phi01, rhs_Phi11, ...
-        rhs_S, rhs_Pi_S, rhs_Phi_S, rhs_psi, rhs_Pi_psi, rhs_Phi_psi] = compute_RHS
+function compute_RHS
 Globals1D;
 GlobalsGR;
 %inverse metric
@@ -164,21 +163,87 @@ src_Phi_psi = lapse.*(0.5.*Pi_psi.*(normal0.*normal0.*Phi00 + 2.*normal0.*normal
 
 
 %Hhat terms
-[deri_plus_g00, deri_minus_g00] = deri(g00, g00, g00_exact);
-[deri_plus_g01, deri_minus_g01] = deri(g01, g01, g01_exact);
-[deri_plus_g11, deri_minus_g11] = deri(g11, g11, g11_exact);
-[deri_plus_Pi00, deri_minus_Pi00] = deri(Pi00, Pi00, Pi00_exact);
-[deri_plus_Pi01, deri_minus_Pi01] = deri(Pi01, Pi01, Pi01_exact);
-[deri_plus_Pi11, deri_minus_Pi11] = deri(Pi11, Pi11, Pi11_exact);
-[deri_plus_Phi00, deri_minus_Phi00] = deri(Phi00, Phi00, Phi00_exact);
-[deri_plus_Phi01, deri_minus_Phi01] = deri(Phi01, Phi01, Phi01_exact);
-[deri_plus_Phi11, deri_minus_Phi11] = deri(Phi11, Phi11, Phi11_exact);
-[deri_plus_S, deri_minus_S] = deri(S, S, S_exact);
-[deri_plus_Pi_S, deri_minus_Pi_S] = deri(Pi_S, Pi_S, Pi_S_exact);
-[deri_plus_Phi_S, deri_minus_Phi_S] = deri(Phi_S, Phi_S, Phi_S_exact);
-[deri_plus_psi, deri_minus_psi] = deri(psi, psi, psi_exact);
-[deri_plus_Pi_psi, deri_minus_Pi_psi] = deri(Pi_psi, Pi_psi, Pi_psi_exact);
-[deri_plus_Phi_psi, deri_minus_Phi_psi] = deri(Phi_psi, Phi_psi,  Phi_psi);
+if (bdry_type == DIRICHLET)
+    g00_rbdry = g00_exact;
+    g01_rbdry = g01_exact;
+    g11_rbdry = g11_exact;
+    Pi00_rbdry = Pi00_exact;
+    Pi01_rbdry = Pi01_exact;
+    Pi11_rbdry = Pi11_exact;
+    Phi00_rbdry = Phi00_exact;
+    Phi01_rbdry = Phi01_exact;
+    Phi11_rbdry = Phi11_exact;
+    S_rbdry = S_exact;
+    Pi_S_rbdry = Pi_S_exact;
+    Phi_S_rbdry = Phi_S_exact;
+    psi_rbdry = psi_exact;
+    Pi_psi_rbdry = Pi_psi_exact;
+    Phi_psi_rbdry = Phi_psi_exact;
+
+    g00_lbdry = g00;
+    g01_lbdry = g01;
+    g11_lbdry = g11;
+    Pi00_lbdry = Pi00;
+    Pi01_lbdry = Pi01;
+    Pi11_lbdry = Pi11;
+    Phi00_lbdry = Phi00;
+    Phi01_lbdry = Phi01;
+    Phi11_lbdry = Phi11;
+    S_lbdry = S;
+    Pi_S_lbdry = Pi_S;
+    Phi_S_lbdry = Phi_S;
+    psi_lbdry = psi;
+    Pi_psi_lbdry = Pi_psi;
+    Phi_psi_lbdry = Phi_psi;
+else
+    g00_rbdry = g00;
+    g01_rbdry = g01;
+    g11_rbdry = g11;
+    Pi00_rbdry = Pi00;
+    Pi01_rbdry = Pi01;
+    Pi11_rbdry = Pi11;
+    Phi00_rbdry = Phi00;
+    Phi01_rbdry = Phi01;
+    Phi11_rbdry = Phi11;
+    S_rbdry = S;
+    Pi_S_rbdry = Pi_S;
+    Phi_S_rbdry = Phi_S;
+    psi_rbdry = psi;
+    Pi_psi_rbdry = Pi_psi;
+    Phi_psi_rbdry = Phi_psi;
+
+    g00_lbdry = g00;
+    g01_lbdry = g01;
+    g11_lbdry = g11;
+    Pi00_lbdry = Pi00;
+    Pi01_lbdry = Pi01;
+    Pi11_lbdry = Pi11;
+    Phi00_lbdry = Phi00;
+    Phi01_lbdry = Phi01;
+    Phi11_lbdry = Phi11;
+    S_lbdry = S;
+    Pi_S_lbdry = Pi_S;
+    Phi_S_lbdry = Phi_S;
+    psi_lbdry = psi;
+    Pi_psi_lbdry = Pi_psi;
+    Phi_psi_lbdry = Phi_psi;
+end;
+
+[deri_plus_g00, deri_minus_g00] = deri(g00, g00_lbdry, g00_rbdry);
+[deri_plus_g01, deri_minus_g01] = deri(g01, g01_lbdry, g01_rbdry);
+[deri_plus_g11, deri_minus_g11] = deri(g11, g11_lbdry, g11_rbdry);
+[deri_plus_Pi00, deri_minus_Pi00] = deri(Pi00, Pi00_lbdry, Pi00_rbdry);
+[deri_plus_Pi01, deri_minus_Pi01] = deri(Pi01, Pi01_lbdry, Pi01_rbdry);
+[deri_plus_Pi11, deri_minus_Pi11] = deri(Pi11, Pi11_lbdry, Pi11_rbdry);
+[deri_plus_Phi00, deri_minus_Phi00] = deri(Phi00, Phi00_lbdry, Phi00_rbdry);
+[deri_plus_Phi01, deri_minus_Phi01] = deri(Phi01, Phi01_lbdry, Phi01_rbdry);
+[deri_plus_Phi11, deri_minus_Phi11] = deri(Phi11, Phi11_lbdry, Phi11_rbdry);
+[deri_plus_S, deri_minus_S] = deri(S, S_lbdry, S_rbdry);
+[deri_plus_Pi_S, deri_minus_Pi_S] = deri(Pi_S, Pi_S_lbdry, Pi_S_rbdry);
+[deri_plus_Phi_S, deri_minus_Phi_S] = deri(Phi_S, Phi_S_lbdry, Phi_S_rbdry);
+[deri_plus_psi, deri_minus_psi] = deri(psi, psi_lbdry, psi_rbdry);
+[deri_plus_Pi_psi, deri_minus_Pi_psi] = deri(Pi_psi, Pi_psi_lbdry, Pi_psi_rbdry);
+[deri_plus_Phi_psi, deri_minus_Phi_psi] = deri(Phi_psi, Phi_psi_lbdry, Phi_psi_rbdry);
 
 max_alpha = 1.0;
 avg_deri_g00 = 0.5.*(deri_plus_g00+deri_minus_g00);
@@ -237,98 +302,15 @@ rhs_Pi11 = src_Pi11 - Hhat_Pi11;
 rhs_Phi00 = src_Phi00 - Hhat_Phi00;
 rhs_Phi01 = src_Phi01 - Hhat_Phi01;
 rhs_Phi11 = src_Phi11 - Hhat_Phi11;
-rhs_S = src_S - Hhat_S;
-rhs_Pi_S = src_Pi_S - Hhat_Pi_S;
-rhs_Phi_S = src_Phi_S - Hhat_Phi_S;
-rhs_psi = src_psi - Hhat_psi;
-rhs_Pi_psi = src_Pi_psi - Hhat_Pi_psi;
-rhs_Phi_psi = src_Phi_psi - Hhat_Phi_psi;
-
-%inner boundary
-%rhs_g00_in = rhs_g00(vmapI);
-%rhs_g01_in = rhs_g01(vmapI);
-%rhs_g11_in = rhs_g11(vmapI);
-% 
-%rhs_Pi00_in = rhs_Pi00(vmapI);
-%rhs_Pi01_in = rhs_Pi01(vmapI);
-%rhs_Pi11_in = rhs_Pi11(vmapI);
-%                
-%rhs_Phi00_in = rhs_Phi00(vmapI);
-%rhs_Phi01_in = rhs_Phi01(vmapI);
-%rhs_Phi11_in = rhs_Phi11(vmapI);
-
-%rhs_g00(vmapI) = 0.;
-%rhs_g01(vmapI) = 0.;
-%rhs_g11(vmapI) = 0.;
-
-%rhs_Pi00(vmapI) = rhs_Pi00_in - paragamma2*rhs_g00_in;
-%rhs_Pi01(vmapI) = rhs_Pi01_in - paragamma2*rhs_g01_in;
-%rhs_Pi11(vmapI) = rhs_Pi11_in - paragamma2*rhs_g11_in;
-  
-%rhs_Phi00(vmapI);
-%rhs_Phi01(vmapI);
-%rhs_Phi11(vmapI);
-
-%out bdry
-%rhs_g00_out = rhs_g00(vmapO);
-%rhs_g01_out = rhs_g01(vmapO);
-%rhs_g11_out = rhs_g11(vmapO);
-% 
-%rhs_Pi00_out = rhs_Pi00(vmapO);
-%rhs_Pi01_out = rhs_Pi01(vmapO);
-%rhs_Pi11_out = rhs_Pi11(vmapO);
-%                
-%rhs_Phi00_out = rhs_Phi00(vmapO);
-%rhs_Phi01_out = rhs_Phi01(vmapO);
-%rhs_Phi11_out = rhs_Phi11(vmapO);
-%
-%b = sqrt(1/g11(vmapO));
-%rhs_g00(vmapO) = 0.;
-%rhs_g01(vmapO) = 0.;
-%rhs_g11(vmapO) = 0.;
-
-%rhs_Pi00(vmapO) = paragamma2/2*rhs_g00_out + 1/2*rhs_Pi00_out ...
-%        + b/2*rhs_Phi00_out - 0.25*Phi00(vmapO)*power(b,3)*rhs_g11_out;
-%rhs_Pi01(vmapO) = paragamma2/2*rhs_g01_out + 1/2*rhs_Pi01_out ...
-%        + b/2*rhs_Phi01_out - 0.25*Phi01(vmapO)*power(b,3)*rhs_g11_out;
-%rhs_Pi11(vmapO) = paragamma2/2*rhs_g11_out + 1/2*rhs_Pi11_out ...
-%        + b/2*rhs_Phi11_out - 0.25*Phi11(vmapO)*power(b,3)*rhs_g11_out;
-%rhs_Phi00(vmapO) = -paragamma2/2/b*rhs_g00_out ...
-%        + 1/2/b*rhs_Pi00_out + 1/2*rhs_Phi00_out + 0.25*Phi00(vmapO)*power(b,2)*rhs_g11_out;
-%rhs_Phi01(vmapO) = -paragamma2/2/b*rhs_g01_out ...
-%        + 1/2/b*rhs_Pi01_out + 1/2*rhs_Phi01_out + 0.25*Phi01(vmapO)*power(b,2)*rhs_g11_out;
-%rhs_Phi11(vmapO) = -paragamma2/2/b*rhs_g11_out ...
-%        + 1/2/b*rhs_Pi11_out + 1/2*rhs_Phi11_out + 0.25*Phi11(vmapO)*power(b,2)*rhs_g11_out;
-
-
-%rhs_Pi_S(vmapO) = paragamma2/2*rhs_S(vmapO) + 1/2*rhs_Pi_S(vmapO) ...
-%        + b/2*rhs_Phi_S(vmapO) ;
-%rhs_Pi_psi(vmapO) = paragamma2/2*rhs_psi(vmapO) + 1/2*rhs_Pi_psi(vmapO) ...
-%        + b/2*rhs_Phi_psi(vmapO) ;
-%
-%rhs_Phi_S(vmapO) = -paragamma2/2/b*rhs_S(vmapO) ...
-%        + 1/2/b*rhs_Pi_S(vmapO) + 1/2*rhs_Phi_S(vmapO) ;
-%rhs_Phi_psi(vmapO) = -paragamma2/2/b*rhs_psi(vmapO) ...
-%        + 1/2/b*rhs_Pi_psi(vmapO) + 1/2*rhs_Phi_psi(vmapO) ;
-
-
-%rhs_g00 = 0.*x;
-%rhs_g01 = 0.*x;
-%rhs_g11 = 0.*x;
-%rhs_Pi00 = 0.*x;
-%rhs_Pi01 = 0.*x;
-%rhs_Pi11 = 0.*x;
-%rhs_Phi00 = 0.*x;
-%rhs_Phi01 = 0.*x;
-%rhs_Phi11 = 0.*x;
-rhs_S = 0.*x;
-rhs_Pi_S = 0.*x;
-rhs_Phi_S = 0.*x;
-rhs_psi = 0.*x;
-rhs_Pi_psi = 0.*x;
-rhs_Phi_psi = 0.*x;
+rhs_S = 0.*x; %src_S - Hhat_S;
+rhs_Pi_S = 0.*x; %src_Pi_S - Hhat_Pi_S;
+rhs_Phi_S = 0.*x; %src_Phi_S - Hhat_Phi_S;
+rhs_psi = 0.*x; %src_psi - Hhat_psi;
+rhs_Pi_psi = 0.*x; %src_Pi_psi - Hhat_Pi_psi;
+rhs_Phi_psi = 0.*x; %src_Phi_psi - Hhat_Phi_psi;
 
 %constraints
+Cr00 = avg_deri_g00 - Phi00;
+Cr01 = avg_deri_g01 - Phi01;
 Cr11 = avg_deri_g11 - Phi11;
-
 return
