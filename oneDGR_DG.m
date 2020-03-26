@@ -4,12 +4,12 @@ Globals1D;
 GlobalsGR;
 
 % Order of polymomials used for approximation 
-N = 1;
+N = 15;
 
 % Generate simple mesh
 inB = 1.5;
-outB = 10;
-meshNum = 100;
+outB = 5.5;
+meshNum = 4;
 [Nv, VX, K, EToV] = MeshGen1D(inB, outB, meshNum);
 
 % Initialize solver and construct grid and metric
@@ -19,7 +19,7 @@ StartUp1D;
 WITHLIMITER = 0;
 WITHFILTER = 0;
 eta = 0.3;
-s = 30; 
+s = 10; 
 Nc = floor(eta*N);
 F = Filter1D(N, Nc, s);
 
@@ -40,6 +40,11 @@ Nsteps = FinalTime/dt;
 %init_PG_in;
 init_ks_in;
 %init_ks_out;
+
+%Set bdry condition
+DIRICHLET = 1;
+FREEZING = 2;
+bdry_type = FREEZING;
 
 time_seq = [];
 rhs_g11_seq = [];
@@ -71,8 +76,11 @@ res_Phi_psi = zeros(Np,K);
 for tstep=1:Nsteps                                                                                   
     for INTRK = 1:5                                                                            
         timelocal = time + rk4c(INTRK)*dt;                                                           
-        [rhs_g00, rhs_g01, rhs_g11, rhs_Pi00, rhs_Pi01, rhs_Pi11, rhs_Phi00, rhs_Phi01, rhs_Phi11, ...
-                rhs_S, rhs_Pi_S, rhs_Phi_S, rhs_psi, rhs_Pi_psi, rhs_Phi_psi] = compute_RHS;
+        compute_RHS;
+        if (bdry_type == FREEZING)
+            apply_freezing;
+        end;
+
         res_g00 = rk4a(INTRK)*res_g00 + dt*rhs_g00;                                                           
         res_g01 = rk4a(INTRK)*res_g01 + dt*rhs_g01;                                                           
         res_g11 = rk4a(INTRK)*res_g11 + dt*rhs_g11;                                                           
@@ -104,6 +112,7 @@ for tstep=1:Nsteps
         psi = psi+rk4b(INTRK)*res_psi;                                                                      
         Pi_psi = Pi_psi+rk4b(INTRK)*res_Pi_psi;                                                                      
         Phi_psi = Phi_psi+rk4b(INTRK)*res_Phi_psi;                                                                      
+
         %filter
         if (WITHFILTER)
             g00 = F*g00;
@@ -153,10 +162,10 @@ for tstep=1:Nsteps
     C0_seq = [C0_seq, max(max(abs(C0)))];
     C1_seq = [C1_seq, max(max(abs(C1)))];
     Cr11_seq = [Cr11_seq, max(max(abs(Cr11)))];
-    if (mod(tstep, 2000) == 0)
+    if (mod(tstep, 1000) == 0)
         %figure(1); plot(x, g00-g00_exact); title(['Error of g00, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(2); plot(x, g01-g01_exact); title(['Error of g01, t = ', num2str(time)]); drawnow; pause(.1);
-        figure(3); plot(x, g11-g11_exact); title(['Error of g11, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(3); plot(x, g11-g11_exact); title(['Error of g11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(4); plot(x, Pi00-Pi00_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
         %figure(5); plot(x, Pi01-Pi01_exact); title(['t = ', num2str(time)]); drawnow; pause(.1);
         %figure(6); plot(x, Pi11-Pi11_exact); title(['Error of Pi11, t = ', num2str(time)]); drawnow; pause(.1);
@@ -165,15 +174,17 @@ for tstep=1:Nsteps
         figure(9); plot(x, Phi11-Phi11_exact); title(['Error of Phi11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(22); plot(x, g11.*g00 - g01.*g01); title(['Det(g), t = ', num2str(time)]); drawnow; pause(.1);
 
-        %figure(30); plot(x, S-S_exact); title(['Error of S, t = ', num2str(time)]); drawnow; pause(.1);
-        %figure(31); plot(x, Pi_S-Pi_S_exact); title(['Error of Pi_S, t = ', num2str(time)]); drawnow; pause(.1);
-        %figure(32); plot(x, Phi_S-Phi_S_exact); title(['Error of Phi_S, t = ', num2str(time)]); drawnow; pause(.1);
+        figure(30); semilogy(x, abs(C0)); title(['C0, t = ', num2str(time)]); drawnow; pause(.1);
+        figure(31); semilogy(x, abs(C1)); title(['C1, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(32); semilogy(x, abs(Cr00)); title(['Cr00, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(33); semilogy(x, abs(Cr01)); title(['Cr01, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(34); semilogy(x, abs(Cr11)); title(['Cr11, t = ', num2str(time)]); drawnow; pause(.1);
 
-        figure(10); plot(x, rhs_g11); title(['rhs\_g11, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(10); plot(x, rhs_g11); title(['rhs\_g11, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(11); plot(x, rhs_Pi11); title(['rhs\_Pi11, t = ', num2str(time)]); drawnow; pause(.1);
-        figure(12); plot(x, rhs_Phi11); title(['rhs\_Phi11, t = ', num2str(time)]); drawnow; pause(.1);
+        %figure(12); plot(x, rhs_Phi11); title(['rhs\_Phi11, t = ', num2str(time)]); drawnow; pause(.1);
 
-        %figure(13); semilogy(time_seq, C0_seq); title(['max of C0 with time']); drawnow; pause(.1);
+        figure(13); semilogy(time_seq, C0_seq); title(['max of C0 with time']); drawnow; pause(.1);
         figure(14); semilogy(time_seq, C1_seq); title(['max of C1 with time']); drawnow; pause(.1);
         %figure(15); semilogy(time_seq, Cr11_seq); title(['max of Cr11 with time']); drawnow; pause(.1);
 

@@ -1,13 +1,18 @@
 # An octave(matlab) program to solve Einstein Field Equations in 1 dimension (spherical reduction)
 
-Working parameter: 
-* inB = 1.5, outB = 2.5, meshNum = 1;
-* N = 10, eta = 0.3, s = 14;
+* Working parameters: 
+    * inB = 1.5, outB = 2.5;
+    * N = 15, meshNum = 1;
+    * paragamma1 = 10;
+    * bdry\_type = FREEZING.
 
-Still not working: 
-* outB = 5;
+* Want to make working: 
+    * outB >= 5;
+    * bdry = FREEZING or DIRICHLET;
+    * paragamma1?
 
-Conjecture:
-* The instability are because of two things:
-    1. Aliasing
-    2. Something else
+* How to combine freezing incoming characteristic fields condition with filter?
+    * Adjusting rhs(vmapO) actually affect all the values of the outermost cell;
+    * If we apply freezing condition first, then applying the filter will introduce instabilities(known from test);
+    *   
+
