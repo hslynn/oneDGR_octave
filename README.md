@@ -15,4 +15,3 @@
     * Adjusting rhs(vmapO) actually affect all the values of the outermost cell;
     * If we apply freezing condition first, then applying the filter will introduce instabilities(known from test);
     *   
-
