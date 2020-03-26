@@ -12,6 +12,6 @@
     * paragamma1?
 
 * How to combine freezing incoming characteristic fields condition with filter?
-    * Adjusting rhs(vmapO) actually affect all the values of the outermost cell;
-    * If we apply freezing condition first, then applying the filter will introduce instabilities(known from test);
+    * Adjusting U(vmapO) will actually affect the deriU in outermost cell, even though the nodes' values are the same;
+    * If we apply freezing condition first, then applying the filter will introduce instabilities(known from tests);
     *   
