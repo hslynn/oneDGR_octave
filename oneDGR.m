@@ -4,12 +4,12 @@ Globals1D;
 GlobalsGR;
 
 % Order of polymomials used for approximation 
-N = 1;
+N = 2;
 
 % Generate simple mesh
 inB = 1.5;
 outB = 10;
-meshNum = 100;
+meshNum = 30;
 [Nv, VX, K, EToV] = MeshGen1D(inB, outB, meshNum);
 
 % Initialize solver and construct grid and metric
@@ -27,7 +27,7 @@ F = Filter1D(N, Nc, s);
 time = 0;                                                                                                
 FinalTime = 10000.0; 
 xmin = min(abs(x(1,:)-x(2,:)));                                                                          
-dt = 0.9/(2*N+1)*xmin;      
+dt = 0.8/(2*N+1)*xmin;      
 Nsteps = FinalTime/dt;
 
 % Set initial conditions
@@ -174,7 +174,7 @@ for tstep=1:Nsteps
     C0_seq = [C0_seq, max(max(abs(C0)))];
     C1_seq = [C1_seq, max(max(abs(C1)))];
     Cr11_seq = [Cr11_seq, max(max(abs(Cr11)))];
-    if (mod(tstep, 1000) == 0)
+    if (mod(tstep, 100) == 0)
         %figure(1); plot(x, g00-g00_exact); title(['Error of g00, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(2); plot(x, g01-g01_exact); title(['Error of g01, t = ', num2str(time)]); drawnow; pause(.1);
         %figure(3); plot(x, g11-g11_exact); title(['Error of g11, t = ', num2str(time)]); drawnow; pause(.1);
