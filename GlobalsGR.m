@@ -9,7 +9,9 @@ global DIRICHLET FREEZING bdry_type
 %global invg00, invg01, invg11, lapse, shift, normal0, normal1, gamma11;
 %global gamma000, gamma001, gamma011, gamma100, gamma101, gamma111, gamma0, gamma1;
 global C0 C1 Cr00 Cr01 Cr11
-paragamma0 = 10;
+global inB outB
+global USE_S USE_psi
+paragamma0 = 1;
 paragamma1 = -1;
 paragamma2 = 1;
 paragamma4 = 0.5;

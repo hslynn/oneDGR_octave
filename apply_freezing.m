@@ -80,9 +80,9 @@ rhs_Phi11(vmapO) = -paragamma2/2/b*rhs_g11_out ...
 %rhs_Phi01(vmapO) = 0.;
 %rhs_Phi11(vmapO) = 0.;
 
-rhs_S = 0.*x;
-rhs_Pi_S = 0.*x;
-rhs_Phi_S = 0.*x;
+%rhs_S = 0.*x;
+%rhs_Pi_S = 0.*x;
+%rhs_Phi_S = 0.*x;
 rhs_psi = 0.*x;
 rhs_Pi_psi = 0.*x;
 rhs_Phi_psi = 0.*x;
