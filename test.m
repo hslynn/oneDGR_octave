@@ -3,10 +3,10 @@ addpath ServiceRoutines
 Globals1D;
 
 % Order of polymomials used for approximation 
-N = 10;
+N = 2;
 
 % Generate simple mesh
-[Nv, VX, K, EToV] = MeshGen1D(1.5, 10, 8);
+[Nv, VX, K, EToV] = MeshGen1D(1.5, 2.5, 10);
 
 % Initialize solver and construct grid and metric
 StartUp1D;

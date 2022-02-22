@@ -40,9 +40,9 @@ rhs_Phi00_out = rhs_Phi00(vmapO);
 rhs_Phi01_out = rhs_Phi01(vmapO);
 rhs_Phi11_out = rhs_Phi11(vmapO);
 
-rhs_S_out = rhs_S(vmapO);
-rhs_Pi_S_out = rhs_Pi_S(vmapO);
-rhs_Phi_S_out = rhs_Phi_S(vmapO);
+%rhs_S_out = rhs_S(vmapO);
+%rhs_Pi_S_out = rhs_Pi_S(vmapO);
+%rhs_Phi_S_out = rhs_Phi_S(vmapO);
 
 b = sqrt(1/g11(vmapO));
 %rhs_g00(vmapO) = 0.;
@@ -83,6 +83,6 @@ rhs_Phi11(vmapO) = -paragamma2/2/b*rhs_g11_out ...
 %rhs_S = 0.*x;
 %rhs_Pi_S = 0.*x;
 %rhs_Phi_S = 0.*x;
-rhs_psi = 0.*x;
-rhs_Pi_psi = 0.*x;
-rhs_Phi_psi = 0.*x;
+%rhs_psi = 0.*x;
+%rhs_Pi_psi = 0.*x;
+%rhs_Phi_psi = 0.*x;

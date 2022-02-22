@@ -35,7 +35,7 @@ rhs_B_seq = [];
 for tstep=1:Nsteps                                                                                   
     for INTRK = 1:5                                                                            
         timelocal = time + rk4c(INTRK)*dt;                                                           
-        [rhs_A, rhs_B] = RHS_test_dia(A, B, A_exact, B_exact)
+        [rhs_A, rhs_B] = RHS_test_dia(A, B, A_exact, B_exact);
         res_A = rk4a(INTRK)*res_A + dt*rhs_A;                                                           
         res_B = rk4a(INTRK)*res_B + dt*rhs_B;                                                           
 

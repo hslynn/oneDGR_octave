@@ -7,8 +7,8 @@ src_A = (-1/2+M_cos./2).*(-2).*power(x, -3) + (1/2+M_cos./2).*(-1).*power(x,-2);
 src_B = (1/2+M_cos./2).*(-2).*power(x, -3) + (-1/2+M_cos./2).*(-1).*power(x,-2);
 
 %Hhat terms
-[deri_plus_A, deri_minus_A] = deri(A, A, A);
-[deri_plus_B, deri_minus_B] = deri(B, B, B);
+[deri_plus_A, deri_minus_A] = deri(A, A(vmapI), A_exact(vmapO));
+[deri_plus_B, deri_minus_B] = deri(B, B(vmapI), B_exact(vmapO));
 
 max_alpha = 1; 
 avg_deri_A = 0.5.*(deri_plus_A+deri_minus_A);

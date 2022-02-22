@@ -9,12 +9,21 @@ global DIRICHLET FREEZING bdry_type
 %global invg00, invg01, invg11, lapse, shift, normal0, normal1, gamma11;
 %global gamma000, gamma001, gamma011, gamma100, gamma101, gamma111, gamma0, gamma1;
 global C0 C1 Cr00 Cr01 Cr11
-global inB outB
 global USE_S USE_psi
+
+M = 1.0;
+
+%usual parameter
+%paragamma0 = 3.*exp(-power(x./8, 2)./2)+0.1;
+%paragamma1 = -1;
+%paragamma2 = exp(-power(x./8, 2)./2)+0.1;
+%paragamma4 = 0.5;
+%paragamma5 = 0.5;
+
+%testing paramater
 paragamma0 = 1;
 paragamma1 = -1;
 paragamma2 = 1;
-paragamma4 = 0.5;
-paragamma5 = 0.5;
+paragamma4 = 0;
+paragamma5 = 0;
 
-M = 1.0;

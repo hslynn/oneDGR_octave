@@ -34,6 +34,7 @@ T01 = gamma11.*gamma11.*g01.*g11.*Phi_psi.*Phi_psi + gamma11.*g11.*(-lapse).*Phi
     + 0.5.*g01.*T_scalar;
 T11 = gamma11.*gamma11.*g11.*g11.*Phi_psi.*Phi_psi + 0.5.*g11.*T_scalar;
 
+
 %constraints
 C0 = H0+gamma0;
 C1 = H1+gamma1;
