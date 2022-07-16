@@ -10,6 +10,12 @@ Pi11_exact = 0.*x;
 Phi00_exact = 0.*x;
 Phi01_exact = 0.*x;
 Phi11_exact = 0.*x;
+S_exact = 0.*x;
+Pi_S_exact = 0.*x;
+Phi_S_exact = 0.*x;
+psi_exact = 0.*x;
+Pi_psi_exact = 0.*x;
+Phi_psi_exact = 0.*x;
 
 g00 = g00_exact;
 g01 = g01_exact;
@@ -20,6 +26,12 @@ Pi11 = Pi11_exact;
 Phi00 = Phi00_exact;
 Phi01 = Phi01_exact;
 Phi11 = Phi11_exact;
+S = S_exact;
+Pi_S = Pi_S_exact;
+Phi_S = Phi_S_exact;
+psi = psi_exact;
+Pi_psi = Pi_psi_exact;
+Phi_psi = Phi_psi_exact;
 
 H0 = 0.*x;
 H1 = 0.*x + 2./x;

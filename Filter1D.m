@@ -1,4 +1,4 @@
-function [F] = Filter1D(N,Nc,s)
+function [F] = Filter1D(Nc,s)
 
 % function [F] = Filter1D(N,Nc,s)
 % Purpose : Initialize 1D filter matrix of size N.

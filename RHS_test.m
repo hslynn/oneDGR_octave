@@ -10,7 +10,7 @@ src_B = (1/2+M_cos./2).*(-2).*power(x, -3) + (-1/2+M_cos./2).*(-1).*power(x,-2);
 [deri_plus_A, deri_minus_A] = deri(A, A(vmapI), A_exact(vmapO));
 [deri_plus_B, deri_minus_B] = deri(B, B(vmapI), B_exact(vmapO));
 
-max_alpha = 1; 
+max_alpha = 1.5; 
 avg_deri_A = 0.5.*(deri_plus_A+deri_minus_A);
 avg_deri_B = 0.5.*(deri_plus_B+deri_minus_B);
 
@@ -23,8 +23,9 @@ rhs_B = src_B - Hhat_B;
 
 rhs_A_out = rhs_A(vmapO);
 rhs_B_out = rhs_B(vmapO);
-rhs_A(vmapO) = 0.5*rhs_A_out + 0.5*rhs_B_out;
-rhs_B(vmapO) = 0.5*rhs_A_out + 0.5*rhs_B_out;
-
+%rhs_A(vmapO) = 0.5*rhs_A_out + 0.5*rhs_B_out;
+%rhs_B(vmapO) = 0.5*rhs_A_out + 0.5*rhs_B_out;
+rhs_A(vmapO) = 0.;
+rhs_B(vmapO) = 0.;
 
 return

@@ -1,7 +1,6 @@
 function [pPlus, pMinus] = deri(u, u_left, u_right)
 
 Globals1D;
-
 duP = zeros(Nfp*Nfaces,K);
 duM = zeros(Nfp*Nfaces,K);
 duM(:) = (u(vmapM)-u(vmapP)).*(nx(:)-abs(nx(:)))/2;

@@ -3,7 +3,7 @@ addpath ServiceRoutines
 Globals1D;
 
 % Order of polymomials used for approximation 
-N = 2;
+N = 1;
 
 % Generate simple mesh
 [Nv, VX, K, EToV] = MeshGen1D(1.5, 2.5, 10);
@@ -31,12 +31,14 @@ res_A = zeros(Np,K);
 res_B = zeros(Np,K);                                                                                      
                                                                                                          
 % compute time step size                                                                                 
-xmin = min(abs(x(1,:)-x(2,:)));                                                                          
-dt = 0.2*xmin;                                                            
+xmin = min(abs(VX(1:end-1)-VX(2:end)));                                                                          
+dt = 0.5*xmin/(2*N+1);                                                            
 Nsteps = ceil(FinalTime/dt); dt = FinalTime/Nsteps;                                                      
 time_seq = [];
 rhs_A_seq = [];
 rhs_B_seq = [];
+err_A_seq = [];
+err_B_seq = [];
 
 res_A = zeros(Np,K);                                                                                      
 res_B = zeros(Np,K);                                                                                      
@@ -59,14 +61,27 @@ for tstep=1:Nsteps
     % Increment time                                                                                 
     time = time+dt;                                                                                  
     time_seq = [time_seq, time];
-    rhs_A_seq = [rhs_A_seq, max(max(abs(rhs_A)))];
-    rhs_B_seq = [rhs_B_seq, max(max(abs(rhs_B)))];
+    rhs_A_seq = [rhs_A_seq, L2norm(rhs_A)];
+    rhs_B_seq = [rhs_B_seq, L2norm(rhs_B)];
+    err_A_seq = [err_A_seq, L2norm(A-A_exact)];
+    err_B_seq = [err_B_seq, L2norm(B-B_exact)];
     if (mod(tstep, 100) == 0)
-        figure(1); plot(x, A-A_exact); title(['error of A, t = ', num2str(time)]); drawnow; pause(.1);
-        figure(2); plot(x, B-B_exact); title(['error of B, t = ', num2str(time)]); drawnow; pause(.1);
-        %figure(3); plot(x, rhs_A); title(['rhs\_A, t = ', num2str(time)]); drawnow; pause(.1);
-        %figure(4); plot(x, rhs_B); title(['rhs\_B, t = ', num2str(time)]); drawnow; pause(.1);
-        figure(5); semilogy(time_seq, rhs_A_seq); title(['max of rhs\_A with time']); drawnow; pause(.1);
-        figure(6); semilogy(time_seq, rhs_B_seq); title(['max of rhs\_B with time']); drawnow; pause(.1);
+        figure(1); 
+        subplot(2,4,1);
+        plot(x, A-A_exact); title(['error of A, t = ', num2str(time)]); drawnow;
+        subplot(2,4,2);
+        plot(x, B-B_exact); title(['error of B, t = ', num2str(time)]); drawnow;
+        subplot(2,4,3);
+        plot(x, rhs_A); title(['rhs\_A, t = ', num2str(time)]); drawnow;
+        subplot(2,4,4);
+        plot(x, rhs_B); title(['rhs\_B, t = ', num2str(time)]); drawnow;
+        subplot(2,4,5);
+        semilogy(time_seq, rhs_A_seq); title(['L2 of rhs\_A with time']); drawnow;
+        subplot(2,4,6);
+        semilogy(time_seq, rhs_B_seq); title(['L2 of rhs\_B with time']); drawnow;
+        subplot(2,4,7);
+        semilogy(time_seq, err_A_seq); title(['L2 of error of A with time']); drawnow;
+        subplot(2,4,8);
+        semilogy(time_seq, err_B_seq); title(['L2 of error of B with time']); drawnow;
     end;
 end;  

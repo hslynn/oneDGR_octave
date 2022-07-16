@@ -3,6 +3,7 @@ Globals1D;
 GlobalsGR;
 
 %inner boundary
+%if (inB>2)
 %rhs_g00_in = rhs_g00(vmapI);
 %rhs_g01_in = rhs_g01(vmapI);
 %rhs_g11_in = rhs_g11(vmapI);
@@ -15,17 +16,19 @@ GlobalsGR;
 %rhs_Phi01_in = rhs_Phi01(vmapI);
 %rhs_Phi11_in = rhs_Phi11(vmapI);
 %
+%b = sqrt(1/g11(vmapI));
 %rhs_g00(vmapI) = 0.;
 %rhs_g01(vmapI) = 0.;
 %rhs_g11(vmapI) = 0.;
 %
-%rhs_Pi00(vmapI) = rhs_Pi00_in - paragamma2*rhs_g00_in;
-%rhs_Pi01(vmapI) = rhs_Pi01_in - paragamma2*rhs_g01_in;
-%rhs_Pi11(vmapI) = rhs_Pi11_in - paragamma2*rhs_g11_in;
-  
-%rhs_Phi00(vmapI);
-%rhs_Phi01(vmapI);
-%rhs_Phi11(vmapI);
+%rhs_Pi00(vmapI) = -paragamma2/2*rhs_g00_in + 1/2*rhs_Pi00_in + b/2*rhs_Phi00_in;
+%rhs_Pi01(vmapI) = -paragamma2/2*rhs_g01_in + 1/2*rhs_Pi01_in + b/2*rhs_Phi01_in;
+%rhs_Pi11(vmapI) = -paragamma2/2*rhs_g11_in + 1/2*rhs_Pi11_in + b/2*rhs_Phi11_in;
+% 
+%rhs_Phi00(vmapI) = -paragamma2/2/b*rhs_g00_in + 1/2/b*rhs_Pi00_in + 1/2*rhs_Phi00_in  ;
+%rhs_Phi01(vmapI) = -paragamma2/2/b*rhs_g01_in + 1/2/b*rhs_Pi01_in + 1/2*rhs_Phi01_in  ;
+%rhs_Phi11(vmapI) = -paragamma2/2/b*rhs_g11_in + 1/2/b*rhs_Pi11_in + 1/2*rhs_Phi11_in  ;
+%end;
 
 %out bdry
 rhs_g00_out = rhs_g00(vmapO);
